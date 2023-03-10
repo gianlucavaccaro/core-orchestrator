@@ -13,6 +13,12 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 
+import com.orchestrator.model.kafka.OrderEvent;
+
+/*
+ * Consumer
+ * definisce il consumerFactory e il listener responsabili della deserializzazione del messaggio
+ * */
 @EnableKafka
 @Configuration
 public class KafkaConfig {
@@ -20,7 +26,7 @@ public class KafkaConfig {
 	@Value("${spring.kafka.producer.bootstrap-servers}")
 	private String server;
 	
-	@Value("${kafka.groupId}")
+	@Value("${spring.kafka.consumer.group-id}")
 	private String groupId;
 	
 	@Bean
@@ -34,18 +40,17 @@ public class KafkaConfig {
         config.put(ConsumerConfig.GROUP_ID_CONFIG,groupId);
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,StringDeserializer.class);
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,StringDeserializer.class);
-  
+        config.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, true);
         return new DefaultKafkaConsumerFactory<>(config);
     }
   
     // Creating a Listener
-    public ConcurrentKafkaListenerContainerFactory
-    concurrentKafkaListenerContainerFactory(){
+    public ConcurrentKafkaListenerContainerFactory<String,String> concurrentKafkaListenerContainerFactory(){
     	
         ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
         
         factory.setConsumerFactory(consumerFactory());
-        
+                
         return factory;
     }
 	

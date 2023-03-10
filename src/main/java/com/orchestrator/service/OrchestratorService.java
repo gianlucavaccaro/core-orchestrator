@@ -1,6 +1,6 @@
 package com.orchestrator.service;
 
-import javax.annotation.PostConstruct;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +10,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.orchestrator.model.kafka.OrderEvent;
 import com.orchestrator.util.OrchestratorMap;
 
+import jakarta.annotation.PostConstruct;
+/*
+ * Controlla il forkflow e 
+ * 
+ * */
 @Service
 public class OrchestratorService {
 	
@@ -25,6 +30,10 @@ public class OrchestratorService {
 	public void init() {
 		objectMapper = new ObjectMapper();
 	}
+	
+	/*public OrderEvent createOrder(OrderEvent order) {
+		return kafkaProducer.send(order.getLastTracking(), null);
+	}*/
 	
 	public void sendToNextHop(OrderEvent event) throws JsonProcessingException {
 		

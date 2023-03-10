@@ -10,8 +10,7 @@ public class TrackingEvent implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private String status;
 	private String serviceName;
-	private String identifier;
-	private String identifierType;
+	private String failureReason;
 	
 	public String getStatus() {
 		return status;
@@ -25,19 +24,13 @@ public class TrackingEvent implements Serializable{
 	public void setServiceName(String serviceName) {
 		this.serviceName = serviceName;
 	}
-	public String getIdentifier() {
-		return identifier;
+	
+	public String getFailureReason() {
+		return failureReason;
 	}
-	public void setIdentifier(String identifier) {
-		this.identifier = identifier;
-	}
-	public String getIdentifierType() {
-		return identifierType;
-	}
-	public void setIdentifierType(String identifierType) {
-		this.identifierType = identifierType;
+	public void setFailureReason(String failureReason) {
+		this.failureReason = failureReason;
 	}
 
-	
 	
 }
