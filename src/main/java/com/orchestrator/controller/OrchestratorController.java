@@ -34,8 +34,7 @@ public class OrchestratorController {
 		event.setUUID_str(uuid);
 		event.getTracking().add(tracking);
 		orchestratorService.sendToNextHop(event);
-		System.out.println("Messaggio inviato: "+ event.getLastTracking().toString());
-		return new ResponseEntity<String>("Ordine preso in carico",HttpStatus.OK);
+		return new ResponseEntity<String>(uuid,HttpStatus.OK);
 	}
 	
 }

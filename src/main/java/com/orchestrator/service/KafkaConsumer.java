@@ -2,8 +2,11 @@ package com.orchestrator.service;
 
 
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.config.KafkaListenerEndpointRegistry;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -20,8 +23,11 @@ public class KafkaConsumer {
 	
 	@Autowired
 	OrchestratorService service; 
+	@Autowired
+	KafkaListenerEndpointRegistry registry;
 	
 	private ObjectMapper objectMapper;
+	private static final Logger logger = LogManager.getLogger(KafkaConsumer.class);
 	
 	@PostConstruct
 	public void init() {
@@ -38,21 +44,18 @@ public class KafkaConsumer {
 		this.objectMapper = objectMapper;
 	}
 
-//nuovo listener per gestire la notifica?!
-
-	@KafkaListener(topics = "TOPIC_ORCHESTRATOR_IN", groupId = "CORE-ORCHESTRATOR_KAFKA_TOPIC_ORCHESTRATOR_IN")
+	@KafkaListener(id="orchestrator",topics = "TOPIC_ORCHESTRATOR_IN", groupId = "CORE-ORCHESTRATOR_KAFKA_TOPIC_ORCHESTRATOR_IN")
 	public void consume(String message) throws JsonMappingException, JsonProcessingException {
 		System.out.println("message = " + message);
 		OrderEvent event = objectMapper.readValue(message, OrderEvent.class);
-		TrackingEvent trackingRecord=new TrackingEvent();
+		logger.info("Received OrdeEvent in core-orch from "+ event.getLastTracking().getServiceName() + ", with status - "+event.getLastTracking().getStatus()+".");
+		/*TrackingEvent trackingRecord=new TrackingEvent();
 		trackingRecord=event.getLastTracking();
-		if(trackingRecord.getStatus().equals("CANCELLED"))
-			System.out.println(trackingRecord.getFailureReason());
-		else if (trackingRecord.getStatus().equals("REJECTED"))
-			System.out.println(trackingRecord.getFailureReason());
-		else
+		if(trackingRecord.getServiceName().equals("core-order") && trackingRecord.getStatus().equals("CONFIRMED"))
+			registry.getListenerContainer("orchestrator").stop();
+		else*/
 			service.sendToNextHop(event);
-		System.out.println("Messaggio da orchestrator inviato");
+		logger.info("Sending EventOrder from core-orchestrator to next step.");
 	}
 
 }
