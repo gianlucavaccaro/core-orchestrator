@@ -52,7 +52,7 @@ public class KafkaConsumer {
 		/*TrackingEvent trackingRecord=new TrackingEvent();
 		trackingRecord=event.getLastTracking();
 		if(trackingRecord.getServiceName().equals("core-order") && trackingRecord.getStatus().equals("CONFIRMED"))
-			registry.getListenerContainer("orchestrator").stop();
+			
 		else*/
 			service.sendToNextHop(event);
 		logger.info("Sending EventOrder from core-orchestrator to next step.");

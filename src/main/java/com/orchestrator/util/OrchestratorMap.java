@@ -37,6 +37,10 @@ public class OrchestratorMap {
 		topicMap.put(getKey("core-storage","REJECTED"), "TOPIC_ORDER_IN");               
 		//ritorno su order dopo aver incrementato in seguito alla transazione di compensazione
 		topicMap.put(getKey("core-storage","ROLLBACK"), "TOPIC_ORDER_IN");
+		
+		 topicMap.put(getKey("core-order","DELETED"),"END_FLOW");
+		 topicMap.put(getKey("core-order","CONFIRMED"),"END_FLOW");
+		 
 	}
 	
 	private String getKey(String serviceName, String status) {
